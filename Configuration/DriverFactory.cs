@@ -2,7 +2,6 @@ using System;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 
 namespace GrowthWheel_AutoTests.Configuration
 {
@@ -37,7 +36,7 @@ namespace GrowthWheel_AutoTests.Configuration
                     case "chrome":
                     {
                         ChromeOptions options = new ChromeOptions();
-                        // options.AddArguments("headless");
+                            // options.AddArguments("headless");
 
                         return new ChromeDriver(config["chrome_driver_path"].ToString(), options);
                     }

@@ -3,38 +3,151 @@ using Xunit;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
-using GrowthWheel_AutoTests.Configuration;
 using OpenQA.Selenium.Support.Extensions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Interactions;
+using System.Collections.Generic;
 
-namespace GrowthWheel_AutoTests.Tests
+namespace GrowthWheel_AutoTests.Configuration
 {
     public class SeleniumTestBase<TFixture> : IDisposable, IClassFixture<TFixture>
         where TFixture: SettingUpFixture
     {
+        protected static IConfiguration config;
         protected IWebDriver driver;
+        protected WebDriverWait webDriverWait;
         protected IJavaScriptExecutor js;
-        protected IConfiguration config; 
         protected TFixture sb;
+        protected IWebElement wait;
+        protected Actions actions;
 
         //running before each test
         public SeleniumTestBase(TFixture sb)
         {
             this.driver = sb.driver;
             this.sb = sb;
-        }
+            this.webDriverWait = new WebDriverWait(sb.driver, TimeSpan.FromSeconds(10));           
+            this.actions = new Actions(sb.driver);
+            this.js = (IJavaScriptExecutor)sb.driver;
 
-        public void TakeScreenshot()
-        {
-            driver.TakeScreenshot()
-                .SaveAsFile(config["screenshots_path"].ToString() + "Screenshot" + "_" + DateTime.Now.ToString("dd_MMMM_hh_mm_ss_tt"), ScreenshotImageFormat.Png);
+            config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
         }
 
         //running after each test
         public void Dispose()
         {
+        }
+
+        public void TakeScreenshot()
+        {
+            driver.TakeScreenshot()
+                .SaveAsFile(config["screenshots_path"].ToString() + "Screenshot" + "_" + DateTime.Now.ToString("dd_MMMM_hh_mm_ss_tt") + ".png", ScreenshotImageFormat.Png);
+        }
+
+        protected IWebElement GetElement(string css)
+        {
+            return webDriverWait.Until(x => x.FindElement(By.CssSelector(css)));
+        }
+
+        protected string GetElementAttribute(string css, string attributeName)
+        {
+            return GetElement(css).GetAttribute(attributeName);
+        }
+
+        
+        protected string GetElementAttribute(IWebElement element, string attributeName)
+        {
+            return element.GetAttribute(attributeName);
+        }
+
+        protected void InputValue(string css, string value)
+        {
+            IWebElement element = GetElement(css);
+            element.Clear();
+            element.SendKeys(value);
+        }
+
+        protected void SelectElementByValue(string css, string value)
+        {
+            var selectElement = new SelectElement(GetElement(css));
+            selectElement.SelectByValue(value);
+        }
+
+        protected void SelectElementByText(string css, string value)
+        {
+            var selectElement = new SelectElement(GetElement(css));
+            selectElement.SelectByText(value);
+        }
+
+        protected string GetElementValueWhenAppear(string css)
+        {
+            return webDriverWait.Until(x =>
+            {
+                var el = x.FindElement(By.CssSelector(css));
+                var value = el.GetAttribute("value");
+                if (string.IsNullOrEmpty(value))
+                {
+                    return null;
+                }
+
+                return value;                
+            });
+        }
+
+        protected IWebElement GetElementInListByText(string css, string textInElement, out int count)
+        {
+            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(css)));
+            IList<IWebElement> ItemsList = driver.FindElements(By.CssSelector(css));
+            count = 1;
+            foreach (var c in ItemsList)
+            {
+                if (c.Text.Equals(textInElement))
+                    return c;
+                count++;
+            }
+            return null;
+        }
+
+        protected IWebElement GetElementInListByText(string css, string textInElement)
+        {            
+            return GetElementInListByText(css, textInElement, out var count);
+        }
+
+        protected int GetElementIndexInListByText(string css, string textInElement)
+        {
+            GetElementInListByText(css, textInElement, out var count);
+            return count;
+        }
+
+        protected IWebElement GetElementInListByIndex(string css, int index)
+        {
+            IList<IWebElement> elements = driver.FindElements(By.CssSelector(css));
+            return elements[index];
+        }
+
+        protected void MoveToElement(string css)
+        {
+            actions = new Actions(sb.driver);
+            actions.MoveToElement(GetElement(css)).Build().Perform();          
+        }
+
+        protected void ClickOnItemInTable(string cssItemsList, string title, string cssNextButton)
+        {
+            while (true)
+            {
+                var elem = GetElementInListByText(cssItemsList, title);
+
+                if (elem != null)
+                {
+                    elem.Click();
+                    break;
+                }
+
+                GetElement(cssNextButton).Click();
+            }
         }
     }
 
