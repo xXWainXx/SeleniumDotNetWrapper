@@ -14,8 +14,9 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Users
             : base(sb)
         { }
 
-        public static string URL = config["basic_url"] + "/users/add";
+        public static string URL = config["basic_global_url"] + "/users/add";
 
+        //needs to be refactored
         private IWebElement _userLanguageDanishCheckbox;
         private IWebElement _userLanguageEnglishCheckbox;
         private IWebElement _userLanguageSpanishCheckbox;
@@ -250,7 +251,7 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Users
             SetState(state);
             SetCertificationCity(certificationCity);
 
-            if (userGroup != UserGroup.Admin)
+            if (userGroup != UserGroup.Admin || userGroup != UserGroup.Mentor)
                 SetWelcomeEmail(welcomeEmail);
 
             return SubmitForm();
@@ -258,33 +259,19 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Users
 
         public void InitLanguages()
         {
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageDanishCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageEnglishCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageSpanishCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageGermanCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageFrenchCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageBulgarianCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageDutchCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageCzechCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageNorwegianCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguagePortugueseCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageArabicCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageHungarianCheckboxSelector)));
-            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(userLanguageSwedishCheckboxSelector)));
-
-            _userLanguageDanishCheckbox = driver.FindElement(By.CssSelector(userLanguageDanishCheckboxSelector));
-            _userLanguageEnglishCheckbox = driver.FindElement(By.CssSelector(userLanguageEnglishCheckboxSelector));
-            _userLanguageSpanishCheckbox = driver.FindElement(By.CssSelector(userLanguageSpanishCheckboxSelector));
-            _userLanguageGermanCheckbox = driver.FindElement(By.CssSelector(userLanguageGermanCheckboxSelector));
-            _userLanguageFrenchCheckbox = driver.FindElement(By.CssSelector(userLanguageFrenchCheckboxSelector));
-            _userLanguageBulgarianCheckbox = driver.FindElement(By.CssSelector(userLanguageBulgarianCheckboxSelector));
-            _userLanguageDutchCheckbox = driver.FindElement(By.CssSelector(userLanguageDutchCheckboxSelector));
-            _userLanguageCzechCheckbox = driver.FindElement(By.CssSelector(userLanguageCzechCheckboxSelector));
-            _userLanguageNorwegianCheckbox = driver.FindElement(By.CssSelector(userLanguageNorwegianCheckboxSelector));
-            _userLanguagePortugueseCheckbox = driver.FindElement(By.CssSelector(userLanguagePortugueseCheckboxSelector));
-            _userLanguageArabicCheckbox = driver.FindElement(By.CssSelector(userLanguageArabicCheckboxSelector));
-            _userLanguageHungarianCheckbox = driver.FindElement(By.CssSelector(userLanguageHungarianCheckboxSelector));
-            _userLanguageSwedishCheckbox = driver.FindElement(By.CssSelector(userLanguageSwedishCheckboxSelector));
+            _userLanguageDanishCheckbox = GetElement(userLanguageDanishCheckboxSelector);
+            _userLanguageEnglishCheckbox = GetElement(userLanguageEnglishCheckboxSelector);
+            _userLanguageSpanishCheckbox = GetElement(userLanguageSpanishCheckboxSelector);
+            _userLanguageGermanCheckbox = GetElement(userLanguageGermanCheckboxSelector);
+            _userLanguageFrenchCheckbox = GetElement(userLanguageFrenchCheckboxSelector);
+            _userLanguageBulgarianCheckbox = GetElement(userLanguageBulgarianCheckboxSelector);
+            _userLanguageDutchCheckbox = GetElement(userLanguageDutchCheckboxSelector);
+            _userLanguageCzechCheckbox = GetElement(userLanguageCzechCheckboxSelector);
+            _userLanguageNorwegianCheckbox = GetElement(userLanguageNorwegianCheckboxSelector);
+            _userLanguagePortugueseCheckbox = GetElement(userLanguagePortugueseCheckboxSelector);
+            _userLanguageArabicCheckbox = GetElement(userLanguageArabicCheckboxSelector);
+            _userLanguageHungarianCheckbox = GetElement(userLanguageHungarianCheckboxSelector);
+            _userLanguageSwedishCheckbox = GetElement(userLanguageSwedishCheckboxSelector);
         }
 
     }

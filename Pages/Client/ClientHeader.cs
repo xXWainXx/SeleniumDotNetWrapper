@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GrowthWheel_AutoTests.Configuration;
+using GrowthWheel_AutoTests.Pages.Guest;
 
 namespace GrowthWheel_AutoTests.Pages.Client
 {

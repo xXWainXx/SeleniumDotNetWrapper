@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using GrowthWheel_AutoTests.Configuration;
+using System.Collections.Generic;
 
 namespace GrowthWheel_AutoTests.Pages.Admin.Users
 {
@@ -10,12 +11,13 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Users
             :base(sb)
         { }
 
-        public static string URL = config["basic_url"] + "/users";
+        public static string URL = config["basic_global_url"] + "/users";
 
         protected string addUserButtonSelector = "a[href='/users/add']";
         protected string emailSearchFieldSelector = "#UserFemail";
+        protected string organizationSearchFieldSelector = "#UserForganization";
         protected string submitSearchButtonSelector = "#filterTableMenuSubmit";
-        protected string viewUserForDeleteButtonSelector = "a[href^='/users/view/']";
+        protected string viewUserForDeleteButtonSelector = "a[href^='/users/view/']:first-child";
         protected string changeUserPasswordButtonSelector = "a[href^='/users/editpassword/']";
         protected string inputNewPasswordFieldSelector = "#UserPassword1";
         protected string inputNewPasswordConfirmationFieldSelector = "#UserPassword2";
@@ -52,6 +54,24 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Users
             GetElement(viewUserForDeleteButtonSelector).Click();
             GetElement(deleteUserButtonSelector).Click();
             GetElement(deleteUserButtonConfirmSelector).Click();
+        }
+
+        public void DeleteUsersByOrganizationName(string organizationName)
+        {
+            driver.Navigate().GoToUrl(URL);
+
+            InputValue(organizationSearchFieldSelector, organizationName);
+            GetElement(submitSearchButtonSelector).Click();
+            IList<IWebElement> viewUserButtons = driver.FindElements(By.CssSelector(viewUserForDeleteButtonSelector));
+
+            for (int i = 0; i < viewUserButtons.Count; i++)
+            {
+                GetElement(viewUserForDeleteButtonSelector).Click();
+                GetElement(deleteUserButtonSelector).Click();
+                GetElement(deleteUserButtonConfirmSelector).Click();
+                InputValue(organizationSearchFieldSelector, organizationName);
+                GetElement(submitSearchButtonSelector).Click();
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using GrowthWheel_AutoTests.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support;
+using GrowthWheel_AutoTests.Pages.Guest;
 
 namespace GrowthWheel_AutoTests.Pages.Advisor
 {
@@ -110,6 +111,7 @@ namespace GrowthWheel_AutoTests.Pages.Advisor
 
         public void ClickBusinessProfileCustomerReferencesButton() => GetElement(businessCustomerReferencesButtonSelector).Click();
 
+        public IWebElement GetBusinessProfileTeamButton() => GetElement(businessTeamButtonSelector);
         public void ClickBusinessProfileTeamButton() => GetElement(businessTeamButtonSelector).Click();
 
         public void ClickBusinessProfilePartnersButton() => GetElement(businessPartnersButtonSelector).Click();

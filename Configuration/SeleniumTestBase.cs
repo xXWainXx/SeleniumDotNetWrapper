@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
 using System.Collections.Generic;
+using System.Threading;
+using System.Diagnostics;
 
 namespace GrowthWheel_AutoTests.Configuration
 {
@@ -39,17 +41,25 @@ namespace GrowthWheel_AutoTests.Configuration
         //running after each test
         public void Dispose()
         {
+            
         }
 
-        public void TakeScreenshot()
+        public void TakeScreenshot(string methodName)
         {
             driver.TakeScreenshot()
-                .SaveAsFile(config["screenshots_path"].ToString() + "Screenshot" + "_" + DateTime.Now.ToString("dd_MMMM_hh_mm_ss_tt") + ".png", ScreenshotImageFormat.Png);
+                .SaveAsFile(config["screenshots_path"].ToString() + methodName + "_" + DateTime.Now.ToString("dd_MMMM_hh_mm_ss_tt") + ".png", ScreenshotImageFormat.Png);
         }
 
         protected IWebElement GetElement(string css)
         {
-            return webDriverWait.Until(x => x.FindElement(By.CssSelector(css)));
+            try
+            {
+                return webDriverWait.Until(x => x.FindElement(By.CssSelector(css)));
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         protected string GetElementAttribute(string css, string attributeName)
@@ -88,7 +98,7 @@ namespace GrowthWheel_AutoTests.Configuration
             {
                 var el = x.FindElement(By.CssSelector(css));
                 var value = el.GetAttribute("value");
-                if (string.IsNullOrEmpty(value))
+                if (String.IsNullOrWhiteSpace(value))
                 {
                     return null;
                 }
@@ -111,6 +121,19 @@ namespace GrowthWheel_AutoTests.Configuration
             return null;
         }
 
+        protected IWebElement GetElementInListByText(string css, string textInElement, string cssNextButton)
+        {
+            while (true)
+            {
+                var elem = GetElementInListByText(css, textInElement, out var count);
+
+                if (elem != null)
+                    return elem;
+
+                GetElement(cssNextButton).Click();
+            }
+        }
+
         protected IWebElement GetElementInListByText(string css, string textInElement)
         {            
             return GetElementInListByText(css, textInElement, out var count);
@@ -124,6 +147,7 @@ namespace GrowthWheel_AutoTests.Configuration
 
         protected IWebElement GetElementInListByIndex(string css, int index)
         {
+            wait = webDriverWait.Until(x => x.FindElement(By.CssSelector(css)));
             IList<IWebElement> elements = driver.FindElements(By.CssSelector(css));
             return elements[index];
         }
@@ -147,6 +171,35 @@ namespace GrowthWheel_AutoTests.Configuration
                 }
 
                 GetElement(cssNextButton).Click();
+            }
+        }
+
+        protected IWebElement GetItemInTableWithPagination(string cssItemsList, string title, string cssNextButton)
+        {
+            while (true)
+            {
+                var elem = GetElementInListByText(cssItemsList, title);
+
+                if (elem != null)
+                    return elem;
+
+                GetElement(cssNextButton).Click();
+            }
+        }
+
+        protected void Check(Action action)
+        {
+            var frame = new StackFrame(1);
+            var methodName = frame.GetMethod().Name.ToString();
+
+            try
+            {               
+                action();
+            }
+            catch (Exception ex)
+            {     
+                TakeScreenshot(methodName);
+                throw;
             }
         }
     }

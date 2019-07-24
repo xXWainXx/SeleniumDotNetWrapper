@@ -36,7 +36,7 @@ namespace GrowthWheel_AutoTests.Configuration
                     case "chrome":
                     {
                         ChromeOptions options = new ChromeOptions();
-                            // options.AddArguments("headless");
+                        //options.AddArguments("headless");
 
                         return new ChromeDriver(config["chrome_driver_path"].ToString(), options);
                     }

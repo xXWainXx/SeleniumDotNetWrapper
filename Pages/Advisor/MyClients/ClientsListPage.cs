@@ -20,7 +20,7 @@ namespace GrowthWheel_AutoTests.Pages.Advisor.MyClients
             : base(sb)
         { }
 
-        public static string URL = config["basic_url"] + "/clients";
+        public static string URL = config["basic_global_url"] + "/clients";
 
         protected string listButtonSelector = "#list";
         protected string analyticsButtonSelector = "a[href='/analytics/clients']";

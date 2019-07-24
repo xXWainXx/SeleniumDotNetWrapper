@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Xunit;
 using GrowthWheel_AutoTests.Configuration;
@@ -15,6 +15,7 @@ using GrowthWheel_AutoTests.Pages.Advisor.MyClients;
 using GrowthWheel_AutoTests.Pages.Advisor.MyClients.BusinessProfile;
 using GrowthWheel_AutoTests.Pages.Advisor.MyClients.ClientRelation;
 using System.Collections.Generic;
+using GrowthWheel_AutoTests.Pages.Guest;
 
 namespace GrowthWheel_AutoTests.Tests
 {
@@ -23,30 +24,23 @@ namespace GrowthWheel_AutoTests.Tests
         public UnitTest1(SettingUpFixture sb)
             : base(sb)
         {
+            loginPage = new LoginPage(sb);
+            interactionsPage = new InteractionsPage(sb);
+            addEditInteractionPage = new AddEditInteractionPage(sb);
+            clientsListPage = new ClientsListPage(sb);
+            advisorHeader = new AdvisorHeader(sb);
         }
+
+        LoginPage loginPage;
+        InteractionsPage interactionsPage;
+        AddEditInteractionPage addEditInteractionPage;
+        ClientsListPage clientsListPage;
+        AdvisorHeader advisorHeader;
 
         [Fact]
         public void Test1()
         {
-            LoginPage lp = new LoginPage(sb);
-            UsersPage up = new UsersPage(sb);
-            AddEditOrganizationPage addOrganizationPage = new AddEditOrganizationPage(sb);
-            AddEditUserPage addUserPage = new AddEditUserPage(sb);
-            OrganizationsPage op = new OrganizationsPage(sb);
-            SampleData sd = new SampleData(sb);
-            AdvisorHeader header = new AdvisorHeader(sb);
-            ClientsListPage clp = new ClientsListPage(sb);
-            ContactPage cp = new ContactPage(sb);
-            InteractionsPage ip = new InteractionsPage(sb);
-            AddEditInteractionPage createInteractionPage = new AddEditInteractionPage(sb);
-            TermsOfServicePage termsOfServicePage = new TermsOfServicePage(sb);
-            PrivacyPolicyBanner privacyPolicyBanner = new PrivacyPolicyBanner(sb);
-
-            driver.Navigate().GoToUrl(LoginPage.URL);
-            lp.LoginAsFirstAdvisor();
-            header.Logout();
-
+           
         }
-
     }
 }

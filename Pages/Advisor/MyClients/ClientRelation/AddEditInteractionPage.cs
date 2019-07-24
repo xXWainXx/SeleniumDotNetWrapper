@@ -27,7 +27,7 @@ namespace GrowthWheel_AutoTests.Pages.Advisor.MyClients.ClientRelation
         protected string interactionSaveDraftButtonSelector = "button[name='save']";
         protected string interactionSaveAndShareButtonSelector = "button[name='save_share']";
         protected string interactionCancelButtonSelector = "#UserInteractionForm div.fr a";
-        protected string interactionPopUpSaveAndShareButtonSelector = "#dialogForm button.send";
+        protected string interactionPopUpSaveAndShareButtonSelector = "#dialogForm-0 button[type='submit']";
 
         public void SetTitle(string title) => InputValue(interactionTitleFieldSelector, title);
         public IWebElement GetTitle() => GetElement(interactionTitleFieldSelector);

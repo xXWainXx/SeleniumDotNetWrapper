@@ -12,7 +12,7 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Organizations
             : base(sb)
         { }
 
-        public static string URL = config["basic_url"] + "/organizations/add";
+        public static string URL = config["basic_global_url"] + "/organizations/add";
 
         protected string organizationNameFieldSelector = "#OrganizationName";
         protected string organizationTypeSelectFieldSelector = "#OrganizationTypeId";
@@ -30,17 +30,13 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Organizations
         protected string organizationSubmitButtonSelector = "input[type='submit']";
 
         public void SetName(string name) => InputValue(organizationNameFieldSelector, name);
-
         public IWebElement GetName() => GetElement(organizationNameFieldSelector);
 
         public void SetOrganizationType(OrganizationType type) => SelectElementByValue(organizationTypeSelectFieldSelector, ((int)type).ToString());
-
         public IWebElement GetOrganizationType() => GetElement(organizationTypeSelectFieldSelector);
-
         public OrganizationType GetOrganizationTypeValue() => (OrganizationType)int.Parse(GetElementAttribute(organizationTypeSelectFieldSelector, "value"));        
 
         public void SetNetworkOrganization(string networkOrg) => SelectElementByText(organizationNetworkOrganizationSelectFieldSelector, networkOrg);
-
         public IWebElement GetNetworkOrganization() => GetElement(organizationNetworkOrganizationSelectFieldSelector);
 
         public void SetAdvisorOrganization(string advOrg)
@@ -52,9 +48,7 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Organizations
         public IWebElement GetAdvisorOrganization() => GetElement(organizationAdvisorOrganizationDropDownFieldSelector);
 
         public void SetLanguage(LanguagesList language) => SelectElementByText(organizationLanguageFieldSelector, language.ToString());
-
         public IWebElement GetLanguage() => GetElement(organizationLanguageFieldSelector);
-
         public LanguagesList GetLanguageValue() => (LanguagesList)int.Parse(GetElementAttribute(organizationLanguageFieldSelector, "value"));
 
         public void SetCountry(string country)
@@ -66,7 +60,6 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Organizations
         public IWebElement GetCountry() => GetElement(organizationCountryFieldSelector);
 
         public void SetCity(string city) => InputValue(organizationCityFieldSelector, city);
-
         public IWebElement GetCity() => GetElement(organizationCityFieldSelector);
 
         public void SetState(string state)
@@ -99,9 +92,7 @@ namespace GrowthWheel_AutoTests.Pages.Admin.Organizations
         }
 
         public void SetStatus(OrganizationStatus status) => SelectElementByValue(organizationStatusSelectFieldSelector, ((int)status).ToString());
-
         public IWebElement GetStatus() => GetElement(organizationStatusSelectFieldSelector);
-
         public OrganizationStatus GetStatusValue() => (OrganizationStatus)int.Parse(GetElementAttribute(organizationStatusSelectFieldSelector, "value"));
 
         public OrganizationsPage SubmitForm()

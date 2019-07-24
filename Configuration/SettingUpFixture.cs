@@ -13,8 +13,6 @@ namespace GrowthWheel_AutoTests.Configuration
 
         protected IConfiguration config;
 
-        private SampleData init;
-
         //run before all tests in the one class
         public SettingUpFixture()
         {
@@ -27,20 +25,12 @@ namespace GrowthWheel_AutoTests.Configuration
                 .AddJsonFile("appsettings.json", optional:true, reloadOnChange:true)
                 .Build();
 
-            init = new SampleData(this);
-            init.InitSampleData();
-
             driver.Manage().Cookies.DeleteAllCookies();
         }
 
         //run after all tests in the one class
         public void Dispose()
         {
-            driver.Manage().Cookies.DeleteAllCookies();
-
-            init = new SampleData(this);
-            init.DeleteSampleData();
-
             driver.Manage().Cookies.DeleteAllCookies();
             driver.Quit();
         } 
